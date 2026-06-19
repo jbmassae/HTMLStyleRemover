@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Style Remover</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+
+        :root {
+            --blue-darkest: #0E142C;
+            --blue-darker: #081636;
+            --blue-dark: #0F2042;
+            --vast-blue: #1FD9FE;
+            --vast-blue-darker: #18A3D1;
+            --green: #06D69F;
+            --green-darker: #049A72;
+            --warm-white: #FAF7F7;
+            --cool-white: #F2F2F7;
+        }
+
+        body {
+            font-family: 'Moderat', Arial, sans-serif;
+            margin: 20px;
+            background-color: var(--blue-darker);
+            color: var(--warm-white);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--blue-dark);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--vast-blue);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        h2 {
+            color: var(--warm-white);
+            border-bottom: 2px solid var(--vast-blue);
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+        h3 {
+            color: var(--vast-blue);
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 1px solid var(--vast-blue-darker);
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            resize: vertical;
+            box-sizing: border-box;
+            background-color: var(--blue-darkest);
+            color: var(--warm-white);
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--vast-blue);
+            box-shadow: 0 0 0 2px rgba(31, 217, 254, 0.2);
+        }
+        button {
+            background-color: var(--vast-blue);
+            color: var(--blue-darkest);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Moderat', Arial, sans-serif;
+            font-weight: 700;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background-color: var(--vast-blue-darker);
+            color: var(--warm-white);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--vast-blue);
+            border: 1px solid var(--vast-blue);
+        }
+        .btn-secondary:hover {
+            background-color: var(--vast-blue);
+            color: var(--blue-darkest);
+        }
+        .btn-success {
+            background-color: var(--green);
+            color: var(--blue-darkest);
+        }
+        .btn-success:hover {
+            background-color: var(--green-darker);
+            color: var(--warm-white);
+        }
+        .stats {
+            background-color: var(--blue-darkest);
+            border: 1px solid var(--vast-blue-darker);
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            color: var(--cool-white);
+        }
+        .options {
+            background-color: var(--blue-darkest);
+            border: 1px solid var(--blue-dark);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .option-group {
+            margin: 10px 0;
+        }
+        label {
+            margin-left: 8px;
+            cursor: pointer;
+            color: var(--warm-white);
+        }
+        input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: var(--vast-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 HTML Style Code Remover</h1>
+        
+        <div class="section">
+            <h2>Input HTML</h2>
+            <textarea id="inputHtml" placeholder="Paste your HTML code here..."></textarea>
+            
+            <div class="options">
+                <h3>Removal Options:</h3>
+                <div class="option-group">
+                    <input type="checkbox" id="removeStyleAttr" checked>
+                    <label for="removeStyleAttr">Remove inline style attributes</label>
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="removeStyleTags" checked>
+                    <label for="removeStyleTags">Remove &lt;style&gt; tags and content</label>
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="removeClassAttr">
+                    <label for="removeClassAttr">Remove class attributes</label>
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="removeCssFiles">
+                    <label for="removeCssFiles">Remove CSS file references (&lt;link&gt; tags)</label>
+                </div>
+                <div class="option-group">
+                    <input type="checkbox" id="preserveFormatting" checked>
+                    <label for="preserveFormatting">Preserve HTML formatting</label>
+                </div>
+            </div>
+            
+            <button onclick="processHtml()">🧹 Remove Style Code</button>
+            <button onclick="clearAll()" class="btn-secondary">🗑️ Clear All</button>
+            <button onclick="loadSample()" class="btn-secondary">📝 Load Sample</button>
+        </div>
+        
+        <div class="section">
+            <h2>Statistics</h2>
+            <div id="stats" class="stats">
+                No processing done yet
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Cleaned HTML</h2>
+            <textarea id="outputHtml" placeholder="Cleaned HTML will appear here..." readonly></textarea>
+            <button onclick="copyToClipboard()" class="btn-success">📋 Copy to Clipboard</button>
+            <button onclick="downloadHtml()" class="btn-success">💾 Download HTML</button>
+        </div>
+    </div>
+
+    <script>
+        function removeStyleCode(htmlString, options = {}) {
+            const {
+                removeStyleAttr = true,
+                removeStyleTags = true,
+                removeClassAttr = false,
+                removeCssFiles = false,
+                preserveFormatting = true
+            } = options;
+            
+            let processed = htmlString;
+            let removedCount = 0;
+            
+            // Create a temporary DOM for processing
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = processed;
+            
+            // Remove inline style attributes
+            if (removeStyleAttr) {
+                const elementsWithStyle = tempDiv.querySelectorAll('[style]');
+                removedCount += elementsWithStyle.length;
+                elementsWithStyle.forEach(element => {
+                    element.removeAttribute('style');
+                });
+            }
+            
+            // Remove <style> tags and their content
+            if (removeStyleTags) {
+                const styleTags = tempDiv.querySelectorAll('style');
+                removedCount += styleTags.length;
+                styleTags.forEach(tag => tag.remove());
+            }
+            
+            // Remove class attributes
+            if (removeClassAttr) {
+                const elementsWithClass = tempDiv.querySelectorAll('[class]');
+                removedCount += elementsWithClass.length;
+                elementsWithClass.forEach(element => {
+                    element.removeAttribute('class');
+                });
+            }
+            
+            // Remove CSS file references
+            if (removeCssFiles) {
+                const linkTags = tempDiv.querySelectorAll('link[rel="stylesheet"], link[type="text/css"]');
+                removedCount += linkTags.length;
+                linkTags.forEach(tag => tag.remove());
+            }
+            
+            processed = tempDiv.innerHTML;
+            
+            // Optional: Clean up excessive whitespace while preserving structure
+            if (!preserveFormatting) {
+                processed = processed
+                    .replace(/\s+/g, ' ')
+                    .replace(/>\s+</g, '><')
+                    .trim();
+            }
+            
+            return {
+                cleanedHtml: processed,
+                removedCount: removedCount,
+                originalLength: htmlString.length,
+                cleanedLength: processed.length,
+                spaceSaved: htmlString.length - processed.length
+            };
+        }
+        
+        function processHtml() {
+            const inputHtml = document.getElementById('inputHtml').value;
+            
+            if (!inputHtml.trim()) {
+                alert('Please paste some HTML code first!');
+                return;
+            }
+            
+            const options = {
+                removeStyleAttr: document.getElementById('removeStyleAttr').checked,
+                removeStyleTags: document.getElementById('removeStyleTags').checked,
+                removeClassAttr: document.getElementById('removeClassAttr').checked,
+                removeCssFiles: document.getElementById('removeCssFiles').checked,
+                preserveFormatting: document.getElementById('preserveFormatting').checked
+            };
+            
+            const result = removeStyleCode(inputHtml, options);
+            
+            document.getElementById('outputHtml').value = result.cleanedHtml;
+            
+            const reductionPercent = ((result.spaceSaved / result.originalLength) * 100).toFixed(1);
+            
+            document.getElementById('stats').innerHTML = `
+                <strong>Processing Complete!</strong><br>
+                • Style elements removed: ${result.removedCount}<br>
+                • Original size: ${result.originalLength.toLocaleString()} characters<br>
+                • Cleaned size: ${result.cleanedLength.toLocaleString()} characters<br>
+                • Space saved: ${result.spaceSaved.toLocaleString()} characters (${reductionPercent}% reduction)
+            `;
+        }
+        
+        function clearAll() {
+            document.getElementById('inputHtml').value = '';
+            document.getElementById('outputHtml').value = '';
+            document.getElementById('stats').innerHTML = 'No processing done yet';
+        }
+        
+        function loadSample() {
+            const sampleHtml = `<div style="background-color: #f0f0f0; padding: 20px; border: 1px solid #ccc;">
+    <h1 style="color: #333; font-size: 24px; margin-bottom: 10px;" class="main-title">Sample Document</h1>
+    <style>
+        .highlight { background-color: yellow; }
+        .bold { font-weight: bold; }
+    </style>
+    <p style="color: #666; line-height: 1.5;" class="content">This is a <span style="font-weight: bold; color: red;" class="highlight bold">sample paragraph</span> with lots of inline styles.</p>
+    <link rel="stylesheet" href="styles.css">
+    <ul style="list-style-type: disc; margin-left: 20px;">
+        <li style="margin-bottom: 5px;" class="list-item">Item 1</li>
+        <li style="margin-bottom: 5px;" class="list-item">Item 2</li>
+    </ul>
+</div>`;
+            
+            document.getElementById('inputHtml').value = sampleHtml;
+        }
+        
+        function copyToClipboard() {
+            const outputHtml = document.getElementById('outputHtml');
+            if (!outputHtml.value) {
+                alert('No cleaned HTML to copy!');
+                return;
+            }
+            
+            outputHtml.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '✅ Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+        
+        function downloadHtml() {
+            const outputHtml = document.getElementById('outputHtml').value;
+            if (!outputHtml) {
+                alert('No cleaned HTML to download!');
+                return;
+            }
+            
+            const blob = new Blob([outputHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cleaned-html.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Auto-resize textareas
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.max(200, this.scrollHeight) + 'px';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
