@@ -1,0 +1,19 @@
+{
+  "colors": {
+    "primary": "#1FD9FE",
+    "secondary": "#0F2042",
+    "accent": "#FFBC42",
+    "background": "#0F2042",
+    "text": "#FAF7F7",
+    "light_gray": "#F2F2F7"
+  },
+  "fonts": {
+    "heading": "Moderat",
+    "body": "Moderat",
+    "heading_size_h1": "32px",
+    "heading_size_h2": "24px",
+    "heading_size_h3": "18px",
+    "body_size": "16px",
+    "line_height": "1.6"
+  }
+}
